@@ -29,13 +29,14 @@ namespace FileDateTimeEditor
         {
             // 初期設定では更新日時だけ変更するようにする。
             // つまり、作成日時、アクセス日時を無効化する。
-            checkBox_CreationTime.Checked = false;
-            checkBox_LastWriteTime.Checked = true;
-            checkBox_LastAccessTime.Checked = false;
+            this.checkBox_CreationTime.Checked = false;
+            this.checkBox_LastWriteTime.Checked = true;
+            this.checkBox_LastAccessTime.Checked = false;
 
             // テキストボックスをチェックボックスに合わせて無効化する。
-            textBox_CreationTime.Enabled = false;
-            textBox_LastAccessTime.Enabled = false;
+            this.checkBox_CreationTime_CheckedChanged(this, e);
+            this.checkBox_LastWriteTime_CheckedChanged(this, e);
+            this.checkBox_LastAccessTime_CheckedChanged(this, e);
         }
 
         /// <summary>
@@ -75,18 +76,17 @@ namespace FileDateTimeEditor
                 if (files == null || files.Length < 1)
                 {
                     // 想定外
-                    return;
                 }
                 else if (files.Length > 1)
                 {
                     // 複数ファイルは受け付けない。
-                    return;
+                    MessageBox.Show("複数ファイルを受け付けることはできません", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
                     // 単一ファイルの時はファイルパスを取得する。
-                    var filePath = files[0];
-                    SetFilePath(filePath);
+                    var filePath = files.First();
+                    this.SetFilePath(filePath);
                 }
             }
         }
@@ -101,13 +101,13 @@ namespace FileDateTimeEditor
             var ofd = new OpenFileDialog
             {
                 Title = "ファイルを選択してください",
-                Filter = "すべてのファイル|*.*|フォルダ|."
+                Filter = "すべてのファイル|*.*"
             };
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 var filePath = ofd.FileName;
-                SetFilePath(filePath);
+                this.SetFilePath(filePath);
             }
         }
 
@@ -118,22 +118,25 @@ namespace FileDateTimeEditor
         private void SetFilePath(string filePath)
         {
             // テキストボックスにファイルパスを入力。
-            textBox_FilePath.Text = filePath;
+            this.textBox_FilePath.Text = filePath;
 
             // ファイルが存在する場合は日時を入力。
-            if (File.Exists(filePath))
+            if (File.Exists(filePath) || Directory.Exists(filePath))
             {
-                var dt_creationTime = File.GetCreationTime(filePath);
-                var dt_lastWriteTime = File.GetLastWriteTime(filePath);
-                var dt_lastAccessTime = File.GetLastAccessTime(filePath);
+                // パスがディレクトリか判定
+                var isDirectory = File
+                    .GetAttributes(filePath)
+                    .HasFlag(FileAttributes.Directory);
 
-                var str_creationTime = dt_creationTime.ToString();
-                var str_lastWriteTime = dt_lastWriteTime.ToString();
-                var str_lastAccessTime = dt_lastAccessTime.ToString();
+                // ファイルまたはディレクトリの情報
+                var fileDirInfo = isDirectory
+                    ? new DirectoryInfo(filePath) as FileSystemInfo
+                    : new FileInfo(filePath) as FileSystemInfo;
 
-                textBox_CreationTime.Text = str_creationTime.ToString();
-                textBox_LastWriteTime.Text = str_lastWriteTime.ToString();
-                textBox_LastAccessTime.Text = str_lastAccessTime.ToString();
+                // 作成日時、更新日時、最終アクセス日時を取得し、テキストボックスに入力
+                this.textBox_CreationTime.Text = fileDirInfo.CreationTime.ToString();
+                this.textBox_LastWriteTime.Text = fileDirInfo.LastWriteTime.ToString();
+                this.textBox_LastAccessTime.Text = fileDirInfo.LastAccessTime.ToString();
             }
         }
 
@@ -144,7 +147,7 @@ namespace FileDateTimeEditor
         /// <param name="e"></param>
         private void checkBox_CreationTime_CheckedChanged(object sender, EventArgs e)
         {
-            textBox_CreationTime.Enabled = checkBox_CreationTime.Checked;
+            this.textBox_CreationTime.Enabled = this.checkBox_CreationTime.Checked;
         }
 
         /// <summary>
@@ -154,7 +157,7 @@ namespace FileDateTimeEditor
         /// <param name="e"></param>
         private void checkBox_LastWriteTime_CheckedChanged(object sender, EventArgs e)
         {
-            textBox_LastWriteTime.Enabled = checkBox_LastWriteTime.Checked;
+            this.textBox_LastWriteTime.Enabled = this.checkBox_LastWriteTime.Checked;
         }
 
         /// <summary>
@@ -164,7 +167,7 @@ namespace FileDateTimeEditor
         /// <param name="e"></param>
         private void checkBox_LastAccessTime_CheckedChanged(object sender, EventArgs e)
         {
-            textBox_LastAccessTime.Enabled = checkBox_LastAccessTime.Checked;
+            this.textBox_LastAccessTime.Enabled = this.checkBox_LastAccessTime.Checked;
         }
 
         /// <summary>
@@ -174,7 +177,6 @@ namespace FileDateTimeEditor
         /// <param name="e"></param>
         private void button_Change_Click(object sender, EventArgs e)
         {
-            // エラーチェック
             try
             {
                 // フォームの情報をアプリに提供する。
@@ -191,6 +193,8 @@ namespace FileDateTimeEditor
 
                 // アプリの処理を実行。
                 app.ChangeFileDateTime();
+
+                MessageBox.Show("日時を更新しました。", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (ErrorMessageException ex)
             {

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace FileDateTimeEditor.MyApplication
 {
+    /// <summary>
+    /// ファイル日時操作クラス
+    /// </summary>
     internal class FileDateTime
     {
         /// <summary>
@@ -55,65 +58,38 @@ namespace FileDateTimeEditor.MyApplication
         /// <summary>
         /// 指定のファイルについて各種日時を変更する。
         /// </summary>
+        /// <exception cref="ErrorMessageException"></exception>
         public void ChangeFileDateTime()
         {
             // エラーチェック
-            CheckErrorForChangingFileDateTime();
+            this.CheckErrorForChangingFileDateTime();
 
             // パスがディレクトリか判定
             var isDirectory = File
                 .GetAttributes(this.FilePath)
                 .HasFlag(FileAttributes.Directory);
 
+            // ファイルまたはディレクトリの情報
+            var fileDirInfo = isDirectory
+                ? new DirectoryInfo(this.FilePath) as FileSystemInfo
+                : new FileInfo(this.FilePath) as FileSystemInfo;
+
             // ファイル作成日時変更
             if (this.FlagToChangeCreationTime)
             {
-                var dt = DateTime.Parse(this.StringCreationTime);
-
-                // ファイルの時
-                if (!isDirectory)
-                {
-                    File.SetCreationTime(this.FilePath, dt);
-                }
-                // ディレクトリの時
-                else
-                {
-                    Directory.SetCreationTime(this.FilePath, dt);
-                }
+                fileDirInfo.CreationTime = DateTime.Parse(this.StringCreationTime);
             }
 
             // ファイル更新日時変更
             if (this.FlagToChangeLastWriteTime)
             {
-                var dt = DateTime.Parse(this.StringLastWriteTime);
-
-                // ファイルの時
-                if (!isDirectory)
-                {
-                    File.SetLastWriteTime(this.FilePath, dt);
-                }
-                // ディレクトリの時
-                else
-                {
-                    Directory.SetLastWriteTime(this.FilePath, dt);
-                }
+                fileDirInfo.LastWriteTime = DateTime.Parse(this.StringLastWriteTime);
             }
 
             // ファイルアクセス日時変更
             if (this.FlagToChangeLastAccessTime)
             {
-                var dt = DateTime.Parse(this.StringLastAccessTime);
-
-                // ファイルの時
-                if (!isDirectory)
-                {
-                    File.SetLastAccessTime(this.FilePath, dt);
-                }
-                // ディレクトリの時
-                else
-                {
-                    Directory.SetLastAccessTime(this.FilePath, dt);
-                }
+                fileDirInfo.LastAccessTime = DateTime.Parse(this.StringLastAccessTime);
             }
         }
 
