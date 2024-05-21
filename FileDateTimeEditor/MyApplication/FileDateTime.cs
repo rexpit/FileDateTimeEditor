@@ -1,6 +1,7 @@
 ﻿using FileDateTimeEditor.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,9 +70,9 @@ namespace FileDateTimeEditor.MyApplication
                 .HasFlag(FileAttributes.Directory);
 
             // ファイルまたはディレクトリの情報
-            FileSystemInfo fileDirInfo = isDirectory
-                ? new DirectoryInfo(this.FilePath)
-                : new FileInfo(this.FilePath);
+            var fileDirInfo = isDirectory
+                ? new DirectoryInfo(this.FilePath) as FileSystemInfo
+                : new FileInfo(this.FilePath) as FileSystemInfo;
 
             // ファイル作成日時変更
             if (this.FlagToChangeCreationTime)
