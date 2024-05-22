@@ -57,6 +57,7 @@
             textBox_FilePath.Name = "textBox_FilePath";
             textBox_FilePath.Size = new System.Drawing.Size(236, 23);
             textBox_FilePath.TabIndex = 1;
+            textBox_FilePath.TextChanged += textBox_FilePath_TextChanged;
             // 
             // button_OpenFile
             // 
