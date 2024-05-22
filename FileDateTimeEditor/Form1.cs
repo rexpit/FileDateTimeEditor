@@ -60,7 +60,7 @@ namespace FileDateTimeEditor
         {
             if (e.Data != null)
             {
-                // DataFormats.FileDropを与えて、GetDataPresent()メソッドを呼び出す。
+                // ドラッグ＆ドロップされたファイルパス一覧を取得。
                 var files = e.Data.GetData(DataFormats.FileDrop, false) as string[];
 
                 if (files == null || files.Length < 1)
@@ -76,7 +76,9 @@ namespace FileDateTimeEditor
                 {
                     // 単一ファイルの時はファイルパスを取得する。
                     var filePath = files.First();
-                    this.SetFilePath(filePath);
+
+                    // テキストボックスにファイルパスを入力。
+                    this.textBox_FilePath.Text = filePath;
                 }
             }
         }
@@ -88,17 +90,36 @@ namespace FileDateTimeEditor
         /// <param name="e"></param>
         private void button_OpenFile_Click(object sender, EventArgs e)
         {
+            // すでにテキストボックスにパスが入力されていたらそのフォルダを表示する。
+            var oldPath = this.textBox_FilePath.Text;
+            var initialDir = File.Exists(oldPath) ? Path.GetDirectoryName(oldPath)
+                : Directory.Exists(oldPath) ? oldPath
+                : null;
+
             var ofd = new OpenFileDialog
             {
                 Title = "ファイルを選択してください",
-                Filter = "すべてのファイル|*.*"
+                Filter = "すべてのファイル|*.*",
+                InitialDirectory = initialDir
             };
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 var filePath = ofd.FileName;
-                this.SetFilePath(filePath);
+
+                // テキストボックスにファイルパスを入力。
+                this.textBox_FilePath.Text = filePath;
             }
+        }
+
+        /// <summary>
+        /// ファイルパスのテキスト変更時の処理。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBox_FilePath_TextChanged(object sender, EventArgs e)
+        {
+            this.SetFilePath(textBox_FilePath.Text);
         }
 
         /// <summary>
@@ -107,9 +128,6 @@ namespace FileDateTimeEditor
         /// <param name="filePath">入力ファイルパス</param>
         private void SetFilePath(string filePath)
         {
-            // テキストボックスにファイルパスを入力。
-            this.textBox_FilePath.Text = filePath;
-
             // ファイルが存在する場合は日時を入力。
             if (File.Exists(filePath) || Directory.Exists(filePath))
             {
