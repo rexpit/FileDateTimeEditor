@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FileDateTimeEditor.Exceptions
+﻿namespace FileDateTimeEditor.Exceptions
 {
     /// <summary>
     /// エラーメッセージ表示用例外クラス

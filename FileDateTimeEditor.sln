@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.9.34902.65
+VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDateTimeEditor", "FileDateTimeEditor\FileDateTimeEditor.csproj", "{7F006AED-BC32-46DA-8CB7-C1F24241EEDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDateTimeEditor", "FileDateTimeEditor\FileDateTimeEditor.csproj", "{488E1612-37BA-4957-9DC8-89EE7EB34A7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7F006AED-BC32-46DA-8CB7-C1F24241EEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F006AED-BC32-46DA-8CB7-C1F24241EEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F006AED-BC32-46DA-8CB7-C1F24241EEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F006AED-BC32-46DA-8CB7-C1F24241EEDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488E1612-37BA-4957-9DC8-89EE7EB34A7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488E1612-37BA-4957-9DC8-89EE7EB34A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488E1612-37BA-4957-9DC8-89EE7EB34A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488E1612-37BA-4957-9DC8-89EE7EB34A7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {074BDE10-7049-4823-BFAD-AA6DE58AEF9C}
+		SolutionGuid = {3A2C0429-CA0A-403D-8873-C0051799F498}
 	EndGlobalSection
 EndGlobal
